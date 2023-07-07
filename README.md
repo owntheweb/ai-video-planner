@@ -1,5 +1,7 @@
 # AI Video Planner
 
+![Hello](automated-video-thoughts.jpg)
+
 Partner with AI to generate a detailed guide that can be used to automate the spoken script, filming and production of video content.
 
 This project was created to:
