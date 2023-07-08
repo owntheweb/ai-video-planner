@@ -5,16 +5,27 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-    },
+  theme: {},
+  daisyui: {
+    themes: [
+      'light',
+      {
+        rad: {
+          'primary': '#92e569',
+          'secondary': '#5ef9ff',
+          'accent': '#c3f29b',
+          'neutral': '#29243d',
+          'base-100': '#212b45',
+          'info': '#1dabe7',
+          'success': '#53e9d7',
+          'warning': '#f2b55a',
+          'error': '#e52461',
+        }
+      }
+    ],
+    darkTheme: 'rad',
   },
   plugins: [
-    require("daisyui"),
+    require('daisyui'),
   ],
 }
