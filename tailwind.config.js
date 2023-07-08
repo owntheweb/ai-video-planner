@@ -9,6 +9,7 @@ module.exports = {
   daisyui: {
     themes: [
       'light',
+      'coffee',
       {
         rad: {
           'primary': '#92e569',
@@ -23,7 +24,7 @@ module.exports = {
         }
       }
     ],
-    darkTheme: 'rad',
+    darkTheme: 'coffee',
   },
   plugins: [
     require('daisyui'),
