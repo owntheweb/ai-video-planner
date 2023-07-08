@@ -1,6 +1,23 @@
+"use client"
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
+import classNames from 'classnames';
+
+interface navLink {
+  uri: string,
+  label: string,
+}
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const links: navLink[] = [
+    {
+      uri: '/segments',
+      label: 'Segments',
+    },
+  ];
+  
   return (
     <header className="navbar mb-6 shadow-lg bg-neutral text-neutral-content rounded-box">
       <div className="flex-none px-2 mx-2">
@@ -10,9 +27,19 @@ export default function Header() {
       </div> 
       <div className="flex-1 px-2 mx-2">
         <div className="items-stretch hidden lg:flex">
-          <Link className="btn btn-ghost btn-sm rounded-btn" href="/segments">
-            Segments
-          </Link>
+          {
+            links.map(link =>
+              <Link className={
+                classNames(
+                  'btn btn-ghost btn-sm rounded-btn',
+                  {
+                    'btn-active': pathname.startsWith(link.uri)
+                  }
+                )} href={link.uri}>
+                { link.label }
+              </Link>
+            )
+          }
         </div>
       </div> 
       <div className="flex-none">
