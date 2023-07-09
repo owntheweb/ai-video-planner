@@ -28,14 +28,19 @@ export default function Header() {
       <div className="flex-1 px-2 mx-2">
         <div className="items-stretch lg:flex">
           {
-            links.map(link =>
-              <Link className={
-                classNames(
-                  'btn btn-ghost btn-sm rounded-btn',
-                  {
-                    'btn-active': pathname.startsWith(link.uri)
-                  }
-                )} href={link.uri}>
+            links.map((link, index) =>
+              <Link 
+                className={
+                  classNames(
+                    'btn btn-ghost btn-sm rounded-btn',
+                    {
+                      'btn-active': pathname.startsWith(link.uri)
+                    }
+                  )
+                }
+                href={link.uri}
+                key={`link-${index}`}
+              >
                 { link.label }
               </Link>
             )

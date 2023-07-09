@@ -1,44 +1,19 @@
-import React, { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
 import { SegmentList, SegmentListItem } from '@/components/SegmentList';
+import Link from "next/link";
 
 export default function Segments() {
   
-  // TODO: Start reading from a data source, perhaps locally stored JSON files for demo simplicity
-  // TEMP
-  const segments: SegmentListItem[] = [
-    {
-      title: 'Multiverse Storytime Splash Screen',
-      slug: 'multiverse-storytime-splash-screen',
-    },
-    {
-      title: 'Storytime Initiation Sequence',
-      slug: 'storytime-initiation-sequence',
-    },
-    {
-      title: 'Calm Audience for Storytime Talk',
-      slug: 'calm-audience-for-storytime-talk',
-    },
-    {
-      title: 'Read Storybook',
-      slug: 'read-storybook',
-    },
-    {
-      title: 'Story Commentary',
-      slug: 'story-commentary',
-    },
-    {
-      title: 'Goodbye Message',
-      slug: 'goodbye-message',
-    },
-  ];
-  
   return (
     <main className="prose max-w-none mx-6">
-      <h1>Segments</h1>
+      <div className="not-prose text-sm breadcrumbs mb-6">
+        <ul>
+          <li className=""><Link href="/">Home</Link></li> 
+          <li>Segments</li>
+        </ul>
+      </div>
 
-      <SegmentList segments={segments} />
+      <SegmentList />
 
       <p>A segment is a reusable chunk of video that can be strung together with other segments to form a full video production. Example ideas:</p>
 
