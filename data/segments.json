@@ -1,0 +1,26 @@
+{
+    "multiverse-storytime-splash-screen": {
+        "title": "Multiverse Storytime Splash Screen",
+        "slug": "multiverse-storytime-splash-screen"
+    },
+    "read-storybook": {
+        "title": "Read Storybook",
+        "slug": "read-storybook"
+    },
+    "storytime-initiation-sequence": {
+        "title": "Storytime Initiation Sequence",
+        "slug": "storytime-initiation-sequence"
+    },
+    "calm-audience-for-storytime-talk": {
+        "title": "Calm Audience for Storytime Talk",
+        "slug": "calm-audience-for-storytime-talk"
+    },
+    "story-commentary": {
+        "title": "Story Commentary",
+        "slug": "story-commentary"
+    },
+    "goodbye-message": {
+        "title": "Goodbye Message",
+        "slug": "goodbye-message"
+    }
+}
