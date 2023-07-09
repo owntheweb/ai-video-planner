@@ -1,4 +1,4 @@
-import { SegmentListItem } from '@/components/SegmentList';
+import { SegmentListItem } from '@/app/segments/SegmentList';
 import { list } from '@/components/data/SegmentJsonConnector';
 import { NextRequest, NextResponse } from "next/server";
  

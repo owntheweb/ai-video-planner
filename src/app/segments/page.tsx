@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { SegmentList, SegmentListItem } from '@/components/SegmentList';
+import { SegmentList, SegmentListItem } from '@/app/segments/SegmentList';
 import Link from "next/link";
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function Segments() {
   
   return (
     <main className="prose max-w-none mx-6">
-      <div className="not-prose text-sm breadcrumbs mb-6">
-        <ul>
-          <li className=""><Link href="/">Home</Link></li> 
-          <li>Segments</li>
-        </ul>
-      </div>
+      <Breadcrumbs breadcrumbs={[
+        { uri: '/', title: 'Home' },
+        { title: 'Segments' },
+      ]} />
 
       <SegmentList />
 

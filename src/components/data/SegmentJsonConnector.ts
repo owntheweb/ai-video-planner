@@ -5,52 +5,17 @@ import { JsonDB, Config } from 'node-json-db';
 import slugify from "../utils/Slugify";
 import randomString from '../utils/RandomString';
 import { Segment } from './model/Segment';
-import { SegmentListItem } from '../SegmentList';
+import { SegmentListItem } from '../../app/segments/SegmentList';
 
 const db = new JsonDB(new Config('data/segments', true, true, '/'));
 
-/*
-// TEMP: I populated the JSON data here to figure out how the schema looked fast.
-const makeTestData = async () => {
-  const startingData: SegmentListItem[] = [
-    {
-      "title": "Multiverse Storytime Splash Screen",
-      "slug": "multiverse-storytime-splash-screen"
-    },
-    {
-      "title": "Storytime Initiation Sequence",
-      "slug": "storytime-initiation-sequence"
-    },
-    {
-      "title": "Calm Audience for Storytime Talk",
-      "slug": "calm-audience-for-storytime-talk"
-    },
-    {
-      "title": "Read Storybook",
-      "slug": "read-storybook"
-    },
-    {
-      "title": "Story Commentary",
-      "slug": "story-commentary"
-    },
-    {
-      "title": "Goodbye Message",
-      "slug": "goodbye-message"
-    }
-  ];
-  
-  for (const segment of startingData) {
-    await db.push(`/${segment.slug}`, {
-      title: segment.title,
-      slug: segment.slug,
-    });
-  }
+const emptyResponseSegment: Segment = {
+  title: 'Unknown',
 }
-*/
 
 // Return all segment titles and slugs.
 const list = async (): Promise<SegmentListItem[]> => {
-  const segmentData: any = await db.getData("/"); // TODO: No any!
+  const segmentData: any = await db.getObjectDefault('/', {}); // TODO: No any!
   const segments:Segment[] = Object.values(segmentData);
   const segmentList: SegmentListItem[] = segments.map(segment => ({
     title: segment.title,
@@ -59,7 +24,11 @@ const list = async (): Promise<SegmentListItem[]> => {
   return segmentList ?? [];
 }
 
-// TODO: This will currently overwrite existing content by slug. Need to check existing and alter slug or reject.
+// Get a single segment by slug
+const get = async (slug: string): Promise<Segment> => {
+  return await db.getObjectDefault(`/${slug}`, emptyResponseSegment);
+}
+
 const create = async (segment: Segment): Promise<Segment> => {
   const segments:Segment[] = await db.getData("/");
   let slug = slugify(segment.title);
@@ -92,5 +61,6 @@ const remove = (segment: Segment) => {
 
 export {
   list,
+  get,
   create,
 }

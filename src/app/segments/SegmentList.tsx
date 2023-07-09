@@ -89,7 +89,7 @@ const SegmentList = () => {
             {sortSegments(filteredSegments).map(segment => 
               <Link
                 className="p-4 rounded-lg shadow-lg btn-secondary flex gap-4"
-                href={`/segments/edit/${segment.slug}`}
+                href={`/segments/${segment.slug}`}
                 key={segment.slug}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 shrink-0">
