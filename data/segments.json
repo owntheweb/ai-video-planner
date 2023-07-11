@@ -1,26 +1,32 @@
 {
     "multiverse-storytime-splash-screen": {
         "title": "Multiverse Storytime Splash Screen",
-        "slug": "multiverse-storytime-splash-screen"
+        "slug": "multiverse-storytime-splash-screen",
+        "actions": []
     },
     "read-storybook": {
         "title": "Read Storybook",
-        "slug": "read-storybook"
+        "slug": "read-storybook",
+        "actions": []
     },
     "storytime-initiation-sequence": {
         "title": "Storytime Initiation Sequence",
-        "slug": "storytime-initiation-sequence"
+        "slug": "storytime-initiation-sequence",
+        "actions": []
     },
     "calm-audience-for-storytime-talk": {
         "title": "Calm Audience for Storytime Talk",
-        "slug": "calm-audience-for-storytime-talk"
+        "slug": "calm-audience-for-storytime-talk",
+        "actions": []
     },
     "story-commentary": {
         "title": "Story Commentary",
-        "slug": "story-commentary"
+        "slug": "story-commentary",
+        "actions": []
     },
     "goodbye-message": {
         "title": "Goodbye Message",
-        "slug": "goodbye-message"
+        "slug": "goodbye-message",
+        "actions": []
     }
 }

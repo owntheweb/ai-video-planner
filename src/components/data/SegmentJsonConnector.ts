@@ -11,6 +11,7 @@ const db = new JsonDB(new Config('data/segments', true, true, '/'));
 
 const emptyResponseSegment: Segment = {
   title: 'Unknown',
+  actions: [],
 }
 
 // Return all segment titles and slugs.
