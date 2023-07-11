@@ -18,7 +18,6 @@ const SegmentContext = createContext<{
   dispatch: () => null
 });
 
-// hmm...
 type FcProps = {
   children?: React.ReactNode
 };

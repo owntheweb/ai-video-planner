@@ -25,12 +25,6 @@ export default async function SegmentByUuid(props: SegmentByUuidProps) {
   return (
     <SegmentProvider>
       <main className="prose max-w-none mx-6">
-        <Breadcrumbs breadcrumbs={[
-          { uri: '/', title: 'Home' },
-          { uri: '/segments', title: 'Segments' },
-          { title: segment.title ? segment.title : 'Create' },
-        ]} />
-
         <SegmentForm segment={segment} />
       </main>
     </SegmentProvider>
