@@ -5,12 +5,12 @@ import { Segment } from '@/components/data/model/Segment';
 import { SegmentProvider } from './SegmentContext';
 import SegmentForm from './SegmentForm';
 
-export interface SegmentBySlugParams {
-  slug: string,
+export interface SegmentByUuidParams {
+  uuid: string,
 }
 
-export interface SegmentBySlugProps {
-  params: SegmentBySlugParams,
+export interface SegmentByUuidProps {
+  params: SegmentByUuidParams,
 }
 
 const newSegment: Segment = {
@@ -18,9 +18,9 @@ const newSegment: Segment = {
   actions: [],
 }
 
-export default async function SegmentBySlug(props: SegmentBySlugProps) {
-  const slug = props.params.slug;
-  const segment: Segment = slug === 'create' ? newSegment : await get(slug);
+export default async function SegmentByUuid(props: SegmentByUuidProps) {
+  const uuid = props.params.uuid;
+  const segment: Segment = uuid === 'create' ? newSegment : await get(uuid);
   
   return (
     <SegmentProvider>

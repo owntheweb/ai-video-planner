@@ -9,8 +9,7 @@ export interface SegmentListProps {
 
 export interface SegmentListItem {
   title: string,
-  slug: string,
-  // TODO: Idea: perhaps a tag to group by hmm...
+  uuid: string,
 }
 
 const SegmentList = () => {
@@ -48,6 +47,7 @@ const SegmentList = () => {
     fetch('/api/segments')
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         setSegments(data.segments);
         setFilteredSegments(data.segments);
         setSearchText('');
@@ -89,8 +89,8 @@ const SegmentList = () => {
             {sortSegments(filteredSegments).map(segment => 
               <Link
                 className="p-4 rounded-lg shadow-lg btn-secondary flex gap-4"
-                href={`/segments/${segment.slug}`}
-                key={segment.slug}
+                href={`/segments/${segment.uuid}`}
+                key={segment.uuid}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 shrink-0">
                   <path strokeLinecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />

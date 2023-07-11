@@ -44,7 +44,7 @@ export const segmentReducer = (state: Segment, action: SegmentActions) => {
       return {
         ...state,
         title: action.payload.title,
-        slug: action.payload.slug,
+        uuid: action.payload.uuid,
         created: action.payload.created,
         updated: action.payload.updated,
       }

@@ -2,10 +2,9 @@
 
 import fs from 'fs';
 import { JsonDB, Config } from 'node-json-db';
-import slugify from "../utils/Slugify";
-import randomString from '../utils/RandomString';
 import { Segment } from './model/Segment';
 import { SegmentListItem } from '../../app/segments/SegmentList';
+import { v4 as uuidV4 } from 'uuid';
 
 const db = new JsonDB(new Config('data/segments', true, true, '/'));
 
@@ -14,39 +13,34 @@ const emptyResponseSegment: Segment = {
   actions: [],
 }
 
-// Return all segment titles and slugs.
+// Return all segment titles and uuids.
 const list = async (): Promise<SegmentListItem[]> => {
   const segmentData: any = await db.getObjectDefault('/', {}); // TODO: No any!
   const segments:Segment[] = Object.values(segmentData);
   const segmentList: SegmentListItem[] = segments.map(segment => ({
     title: segment.title,
-    slug: segment.slug ?? '',
+    uuid: segment.uuid ?? '',
   }));
   return segmentList ?? [];
 }
 
-// Get a single segment by slug
-const get = async (slug: string): Promise<Segment> => {
-  return await db.getObjectDefault(`/${slug}`, emptyResponseSegment);
+// Get a single segment by uuid
+const get = async (uuid: string): Promise<Segment> => {
+  return await db.getObjectDefault(`/${uuid}`, emptyResponseSegment);
 }
 
 const create = async (segment: Segment): Promise<Segment> => {
   const segments:Segment[] = await db.getData("/");
-  let slug = slugify(segment.title);
-
-  // prevent data overwrite when duplicate title/slug
-  if (segments.filter(seg => seg.slug === slug).length > 0) {
-    slug = `${slug}-${randomString(6)}`
-  }
+  const uuid = uuidV4();
   
   const newSegment = {
     ...segment,
-    slug,
+    uuid,
     created: new Date().toISOString(),
     updated: new Date().toISOString(),
   };
 
-  await db.push(`/${slug}`, newSegment);
+  await db.push(`/${uuid}`, newSegment);
 
   return newSegment;
 }
