@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, res: NextResponse<SegmentResponseDa
     const newSegment = await create(segment);
 
     return NextResponse.json(
-      { newSegment },
+      { segment: newSegment },
       { status: 200 }
     );
   } catch(err) {

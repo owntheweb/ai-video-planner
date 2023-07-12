@@ -60,7 +60,7 @@ export async function PUT(req: NextRequest) {
     const updatedSegment = await update(segment);
 
     return NextResponse.json(
-      { updatedSegment },
+      { segment: updatedSegment },
       { status: 200 }
     );
   } catch(err) {

@@ -31,26 +31,5 @@
         "actions": [],
         "uuid": "2b9eb1ac-1feb-11ee-be56-0242ac120002",
         "updated": "2023-07-11T21:23:38.318Z"
-    },
-    "f9c36d16-c5ea-4f4d-90d6-2f180fc63f94": {
-        "title": "Test",
-        "actions": [],
-        "uuid": "f9c36d16-c5ea-4f4d-90d6-2f180fc63f94",
-        "created": "2023-07-12T04:59:01.238Z",
-        "updated": "2023-07-12T04:59:01.238Z"
-    },
-    "07188880-4405-4a25-aa53-97faac073ad1": {
-        "title": "Test",
-        "actions": [],
-        "uuid": "07188880-4405-4a25-aa53-97faac073ad1",
-        "created": "2023-07-12T05:02:43.743Z",
-        "updated": "2023-07-12T05:02:43.743Z"
-    },
-    "116e7358-7006-4709-98e5-3ffaaa36dc3a": {
-        "title": "Test 2",
-        "actions": [],
-        "uuid": "116e7358-7006-4709-98e5-3ffaaa36dc3a",
-        "created": "2023-07-12T05:02:46.677Z",
-        "updated": "2023-07-12T05:02:46.677Z"
     }
 }

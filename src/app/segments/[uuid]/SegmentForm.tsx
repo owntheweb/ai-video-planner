@@ -12,13 +12,13 @@ export interface SegmentFormProps {
 
 export default function SegmentForm(props: SegmentFormProps) {
   const { state, dispatch } = useContext(SegmentContext);
-  const [loading, setLoading] = useState(props.uuid ? true : false);
+  const [loading, setLoading] = useState(props.uuid ? true : false); // no need to load if new/empty
   
   // initial load
   useEffect(() => {    
     setLoading(true);
     const getSegment = async (uuid: string) => {
-      await fetch(`/api/segments/${uuid}`)
+      fetch(`/api/segments/${uuid}`)
       .then(res => res.json())
       .then(data => {
         if (!data.segment.uuid) {
@@ -59,13 +59,13 @@ export default function SegmentForm(props: SegmentFormProps) {
       body: JSON.stringify(segment),
     };
     
-    await fetch(uri, request)
+    fetch(uri, request)
       .then(res => res.json())
       .then(data => {
         console.log('saved', data);
         dispatch({
           type: SegmentActionTypes.UpdateSegment,
-          payload: segment,
+          payload: data.segment,
         });
       })
       .catch((err :string) => {
@@ -78,7 +78,7 @@ export default function SegmentForm(props: SegmentFormProps) {
       method: 'DELETE',
     };
     
-    await fetch(`/api/segments/${state.uuid}`, request)
+    fetch(`/api/segments/${state.uuid}`, request)
       .then(() => {
         window.location.href = '/segments';
       })
@@ -91,11 +91,13 @@ export default function SegmentForm(props: SegmentFormProps) {
     deleteSegment();
   }
 
+  // Don't leave the page if form submit event occurs.
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
 
-  const debouncedTitle = useDebouncedCallback(value => {
+  // Reduce calls to save data
+  const handleDebouncedTitle = useDebouncedCallback(value => {
     saveSegment({
       ...state,
       title: value,
@@ -136,12 +138,12 @@ export default function SegmentForm(props: SegmentFormProps) {
             placeholder={ loading ? '' : 'What do we call this segment?'}
             className="input input-bordered w-full max-w-xs"
             defaultValue={state.title}
-            onChange={(e) => debouncedTitle(e.target.value)}
+            onChange={e => handleDebouncedTitle(e.target.value)}
           />
         </div>
 
         <h3>Actions</h3>
-        <p>TODO: Explain what these are.</p>
+        <p>[TODO: Get the fun started here!]</p>
 
         <button
           onClick={handleDelete}
