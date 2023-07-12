@@ -1,6 +1,5 @@
 // NOTE: Don't ever make a production website with a JSON "database". See /data/README.md.
 
-import fs from 'fs';
 import { JsonDB, Config } from 'node-json-db';
 import { Segment } from './model/Segment';
 import { SegmentListItem } from '../../app/segments/SegmentList';
@@ -30,7 +29,6 @@ const get = async (uuid: string): Promise<Segment> => {
 }
 
 const create = async (segment: Segment): Promise<Segment> => {
-  const segments:Segment[] = await db.getData("/");
   const uuid = uuidV4();
   
   const newSegment = {
@@ -40,22 +38,46 @@ const create = async (segment: Segment): Promise<Segment> => {
     updated: new Date().toISOString(),
   };
 
-  await db.push(`/${uuid}`, newSegment);
+  try {
+    await db.push(`/${uuid}`, newSegment);
+  } catch(err) {
+    // TODO: Determine better plan for handling errors up the stack here.
+    console.log('SegmentJsonConnector delete error', err);
+  }
 
   return newSegment;
 }
 
-const update = (segment: Segment) => {
-  // not implemented
+const update = async (segment: Segment) => {
+  const updatedSegment = {
+    ...segment,
+    updated: new Date().toISOString(),
+  };
+
+  try {
+    await db.push(`/${segment.uuid}`, updatedSegment);
+  } catch(err) {
+    // TODO: Determine better plan for handling errors up the stack here.
+    console.log('SegmentJsonConnector delete error', err);
+  }
+
+  return updatedSegment;
 }
 
 // 'delete' would be more CRUD-like, yet delete is reserved word in JavaScript. :)
-const remove = (segment: Segment) => {
-  // not implemented
+const remove = async (uuid: string) => {
+  try {
+    await db.delete(`/${uuid}`);
+  } catch(err) {
+    // TODO: Determine better plan for handling errors up the stack here.
+    console.log('SegmentJsonConnector delete error');
+  }
 }
 
 export {
   list,
   get,
   create,
+  update,
+  remove,
 }

@@ -1,5 +1,5 @@
 import { SegmentListItem } from '@/app/segments/SegmentList';
-import { create, list } from '@/components/data/SegmentJsonConnector';
+import { list, create } from '@/components/data/SegmentJsonConnector';
 import { NextRequest, NextResponse } from "next/server";
 import { Segment } from '@/components/data/model/Segment';
 

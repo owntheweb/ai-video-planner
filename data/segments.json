@@ -11,13 +11,15 @@
     },
     "0f58f124-1feb-11ee-be56-0242ac120002": {
         "title": "Storytime Initiation Sequence",
+        "actions": [],
         "uuid": "0f58f124-1feb-11ee-be56-0242ac120002",
-        "actions": []
+        "updated": "2023-07-12T03:40:31.267Z"
     },
     "1bf8e20e-1feb-11ee-be56-0242ac120002": {
         "title": "Calm Audience for Storytime Talk",
+        "actions": [],
         "uuid": "1bf8e20e-1feb-11ee-be56-0242ac120002",
-        "actions": []
+        "updated": "2023-07-11T21:05:54.740Z"
     },
     "23f11ff8-1feb-11ee-be56-0242ac120002": {
         "title": "Story Commentary",
@@ -26,42 +28,29 @@
     },
     "2b9eb1ac-1feb-11ee-be56-0242ac120002": {
         "title": "Goodbye Message",
+        "actions": [],
         "uuid": "2b9eb1ac-1feb-11ee-be56-0242ac120002",
-        "actions": []
+        "updated": "2023-07-11T21:23:38.318Z"
     },
-    "cbdb81cd-1c6c-4a97-b904-d6340b791ad9": {
-        "title": "Pizza",
+    "f9c36d16-c5ea-4f4d-90d6-2f180fc63f94": {
+        "title": "Test",
         "actions": [],
-        "uuid": "cbdb81cd-1c6c-4a97-b904-d6340b791ad9",
-        "created": "2023-07-11T17:51:02.077Z",
-        "updated": "2023-07-11T17:51:02.077Z"
+        "uuid": "f9c36d16-c5ea-4f4d-90d6-2f180fc63f94",
+        "created": "2023-07-12T04:59:01.238Z",
+        "updated": "2023-07-12T04:59:01.238Z"
     },
-    "048e3980-03fd-4692-b99d-af92270a137b": {
-        "title": "test",
+    "07188880-4405-4a25-aa53-97faac073ad1": {
+        "title": "Test",
         "actions": [],
-        "uuid": "048e3980-03fd-4692-b99d-af92270a137b",
-        "created": "2023-07-11T17:59:38.425Z",
-        "updated": "2023-07-11T17:59:38.425Z"
+        "uuid": "07188880-4405-4a25-aa53-97faac073ad1",
+        "created": "2023-07-12T05:02:43.743Z",
+        "updated": "2023-07-12T05:02:43.743Z"
     },
-    "2cca6e69-8796-4d1a-ae25-0384946fabdc": {
-        "title": "test2",
+    "116e7358-7006-4709-98e5-3ffaaa36dc3a": {
+        "title": "Test 2",
         "actions": [],
-        "uuid": "2cca6e69-8796-4d1a-ae25-0384946fabdc",
-        "created": "2023-07-11T18:00:45.222Z",
-        "updated": "2023-07-11T18:00:45.222Z"
-    },
-    "89f404be-124d-4dc1-b495-eacbe82da660": {
-        "title": "test 3",
-        "actions": [],
-        "uuid": "89f404be-124d-4dc1-b495-eacbe82da660",
-        "created": "2023-07-11T18:01:16.030Z",
-        "updated": "2023-07-11T18:01:16.030Z"
-    },
-    "1fd8d64a-d166-41d1-87fe-9edd0cac8d12": {
-        "title": "New Segment",
-        "actions": [],
-        "uuid": "1fd8d64a-d166-41d1-87fe-9edd0cac8d12",
-        "created": "2023-07-11T18:02:07.976Z",
-        "updated": "2023-07-11T18:02:07.976Z"
+        "uuid": "116e7358-7006-4709-98e5-3ffaaa36dc3a",
+        "created": "2023-07-12T05:02:46.677Z",
+        "updated": "2023-07-12T05:02:46.677Z"
     }
 }

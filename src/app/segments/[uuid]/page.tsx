@@ -20,12 +20,12 @@ const newSegment: Segment = {
 
 export default async function SegmentByUuid(props: SegmentByUuidProps) {
   const uuid = props.params.uuid;
-  const segment: Segment = uuid === 'create' ? newSegment : await get(uuid);
+  // const segment: Segment = uuid === 'create' ? newSegment : await get(uuid);
   
   return (
     <SegmentProvider>
       <main className="prose max-w-none mx-6">
-        <SegmentForm segment={segment} />
+        <SegmentForm uuid={uuid} />
       </main>
     </SegmentProvider>
   )

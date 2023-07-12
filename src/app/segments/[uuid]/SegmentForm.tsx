@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Segment } from '@/components/data/model/Segment';
 import { SegmentContext } from './SegmentContext';
 import { SegmentActionTypes } from './SegmentReducer';
@@ -7,74 +7,106 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { useDebouncedCallback } from 'use-debounce';
 
 export interface SegmentFormProps {
-  segment: Segment,
+  uuid?: string,
 }
 
 export default function SegmentForm(props: SegmentFormProps) {
   const { state, dispatch } = useContext(SegmentContext);
-
+  const [loading, setLoading] = useState(props.uuid ? true : false);
+  
   // initial load
-  useEffect(() => {
-    dispatch({
-      type: SegmentActionTypes.UpdateSegment,
-      payload: props.segment,
-    });
+  useEffect(() => {    
+    setLoading(true);
+    const getSegment = async (uuid: string) => {
+      await fetch(`/api/segments/${uuid}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.segment.uuid) {
+          throw new Error('No segment returned');
+        }
+        dispatch({
+          type: SegmentActionTypes.UpdateSegment,
+          payload: data.segment,
+        });
+        setLoading(false);
+      })
+      .catch((err :string) => {
+        console.log(`API error: ${err}`);
+      });
+    }
+
+    if (props.uuid && props.uuid !== 'create') {
+      getSegment(props.uuid);
+    }
   }, []);
 
   // Save the full segment by either creating a new segment or updating the existing.
-  const saveSegment = async () => {
+  const saveSegment = async (segment: Segment) => {
+    if (segment.title === '') {
+      return;
+    }
+    if (segment.uuid === 'create') {
+      return;
+    }
+    
+    const uri = segment.uuid ? `/api/segments/${segment.uuid}` : '/api/segments';
+    
     const request = {
-      method: state.uuid ? 'PUT' : 'POST',
+      method: segment.uuid ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(state),
+      body: JSON.stringify(segment),
     };
     
-    await fetch('/api/segments', request)
-    .then(res => res.json())
-    .then(data => {
-      console.log('saved', data);
-    })
-    .catch((err :string) => {
-      console.log(`API error: ${err}`);
-    });
+    await fetch(uri, request)
+      .then(res => res.json())
+      .then(data => {
+        console.log('saved', data);
+        dispatch({
+          type: SegmentActionTypes.UpdateSegment,
+          payload: segment,
+        });
+      })
+      .catch((err :string) => {
+        console.log(`API error: ${err}`);
+      });
   }
 
-  // Save segment when form segment-specifics change
-  useEffect(() => {
-    // TODO: I feel this needs a few heartfelt 🍅🍅🍅. I only want to trigger a save when not loading (two state changes for that).
-    // What's the best pattern for triggering segment saves on specific state changes? Or do I need to save BEFORE state change hmm...
+  const deleteSegment = async () => {
+    const request = {
+      method: 'DELETE',
+    };
     
-    // Segment has loaded and has changed from what was loaded.
-    if (state.title !== '' && state.title !== props.segment.title) {
-      saveSegment();
-    }
-  }, [state.title]);
+    await fetch(`/api/segments/${state.uuid}`, request)
+      .then(() => {
+        window.location.href = '/segments';
+      })
+      .catch((err :string) => {
+        console.log(`API error: ${err}`);
+      });
+  }
+
+  const handleDelete = () => {
+    deleteSegment();
+  }
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
 
   const debouncedTitle = useDebouncedCallback(value => {
-    // TODO: Sanity check: Should I update state then submit to API, or other way around?
-    // I like the idea of updating the sate immediately and having server things run in the background.
-    dispatch({
-      type: SegmentActionTypes.UpdateSegment,
-      payload: {
-        ...state,
-        title: value,
-      }
+    saveSegment({
+      ...state,
+      title: value,
     });
   },
     1000
   );
 
-  const breadcrumbTitle = state.uuid === 'create'
+  const breadcrumbTitle = !state.uuid && props.uuid === 'create'
     ? 'Create New Segment'
-    : state.title !== '' // hmm...
-      ? state.title
-      : props.segment.title; // Loading with hard refresh here, initial title available
+    : state.title;
   
   return (
     <>
@@ -101,7 +133,7 @@ export default function SegmentForm(props: SegmentFormProps) {
           </label>
           <input
             type="text"
-            placeholder="What do we call this segment?"
+            placeholder={ loading ? '' : 'What do we call this segment?'}
             className="input input-bordered w-full max-w-xs"
             defaultValue={state.title}
             onChange={(e) => debouncedTitle(e.target.value)}
@@ -110,6 +142,16 @@ export default function SegmentForm(props: SegmentFormProps) {
 
         <h3>Actions</h3>
         <p>TODO: Explain what these are.</p>
+
+        <button
+          onClick={handleDelete}
+          className="btn btn-error rounded-btn gap-4"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Delete Segment
+        </button>
       </form>
       
     </>
