@@ -1,3 +1,5 @@
+// TODO: 🔥🔥🔥: HOT: Going to replace overkill context here with SWR
+
 import { Segment } from "@/components/data/model/Segment";
 
 type ActionMap<M extends { [index: string]: any }> = {

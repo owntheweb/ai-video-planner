@@ -2,6 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import Link from "next/link";
+import useSWR from 'swr';
+import {
+  getSegmentList,
+  segmentListEndpoint as segmentListCacheKey
+} from '../../uiApiLayer/segments';
+import { DrawerWrapper } from '@/components/DrawerWrapper/DrawerWrapper';
+import { SegmentCreateForm } from './SegmentCreateForm';
 
 export interface SegmentListProps {
   segments: SegmentListItem[],
@@ -13,15 +20,25 @@ export interface SegmentListItem {
 }
 
 const SegmentList = () => {
-
+  const {
+    data: segments,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(segmentListCacheKey, getSegmentList, {
+    onSuccess: data => sortSegments(data),
+  });
+  
   const [searchText, setSearchText] = useState('');
-  const [segments, setSegments] = useState<SegmentListItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const toggleDrawer = () => {
+      setIsDrawerOpen((prevState) => !prevState)
+  }
 
   // Changes with search, defaults to all
   const [filteredSegments, setFilteredSegments] = useState(segments);
-  
+
   const sortSegments = (segments: SegmentListItem[]) => {
     return segments.sort((a, b) => {
       return a.title.localeCompare(b.title)
@@ -32,45 +49,68 @@ const SegmentList = () => {
     return segments.filter(segment => segment.title.toLowerCase().includes(searchString.toLowerCase()));
   }
 
+  // Don't leave the page if form submit event occurs.
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }
+
+  // Open the segment create panel on create button press.
+  const handleCreate = () => {
+    toggleDrawer();
+  }
+
+  // Cancel segment creation on cancel click.
+  const handleNewSegmentCancel = () => {
+    toggleDrawer();
+  }
+
+  // Create a new segment on save button / enter
+  const handleNewSegmentSave = async () => {
+    mutate(); // revalidate list data
+    toggleDrawer();
+  }
+
   // We don't really need debounce for this quick project. However,
   // if we start making dynamic search requests to the server for
   // larger or filtered lists, debounce is very important. :D
   const debouncedSearch = useDebouncedCallback(value => {
       setSearchText(value);
-      setFilteredSegments(filterSegments(segments, value));
+      setFilteredSegments(filterSegments(segments ?? [], value));
     },
     350
   );
 
+  // When segments are updated, filter those based on current search value
   useEffect(() => {
-    setLoading(true);
-    fetch('/api/segments')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        setSegments(data.segments);
-        setFilteredSegments(data.segments);
-        setSearchText('');
-        setLoading(false);
-      })
-      .catch((err :string) => {
-        setError(`There was an error loading segments. Tell an adult!`);
-        console.log(`API error: ${err}`);
-        setLoading(false);
-      });
-  }, []);
+    if (isLoading === false) {
+      setFilteredSegments(segments);
+      setSearchText('');
+    }
+  }, [segments]);
   
   return (
     <>
+      <DrawerWrapper
+        title="New Segment"
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+      >
+        <SegmentCreateForm
+          onCreate={handleNewSegmentSave}
+          onCancel={handleNewSegmentCancel}
+          formFocused={isDrawerOpen}
+        />
+      </DrawerWrapper>
+
       <div className="not-prose pb-6 flex gap-4">
-        <Link href="/segments/create" className="btn btn-primary rounded-btn gap-4">
+        <button onClick={handleCreate} className="btn btn-primary rounded-btn gap-4">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
           Create Segment
-        </Link>
+        </button>
 
-        { segments?.length > 0 &&
+        { segments && segments?.length > 0 &&
           <div className="form-control flex-1 invisible sm:visible">
             <input
               type="text"
@@ -83,10 +123,10 @@ const SegmentList = () => {
         }
       </div>
       
-      { filteredSegments.length > 0 && 
+      { filteredSegments && filteredSegments.length > 0 && 
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 not-prose">
-            {sortSegments(filteredSegments).map(segment => 
+            {filteredSegments.map(segment => 
               <Link
                 className="p-4 rounded-lg shadow-lg btn-secondary flex gap-4"
                 href={`/segments/${segment.uuid}`}
@@ -103,14 +143,14 @@ const SegmentList = () => {
         </>
       }
 
-      { !loading && filteredSegments.length === 0 && <div className="text-white">
+      { !isLoading && (!filteredSegments || filteredSegments.length === 0) && <div className="text-white">
         No results
       </div> }
 
-      { loading && <span className="loading loading-spinner text-secondary"></span> }
+      { isLoading && <span className="loading loading-spinner text-secondary"></span> }
 
       { error && <div className="text-error">
-        {error}
+        Error: {error.message}
       </div> }
     </>
   )

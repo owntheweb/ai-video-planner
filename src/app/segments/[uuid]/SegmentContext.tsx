@@ -1,3 +1,5 @@
+// TODO: 🔥🔥🔥: HOT: Going to replace overkill context here with SWR
+
 "use client"
 import { Segment } from '@/components/data/model/Segment';
 import React, { Dispatch, createContext, useReducer } from 'react';

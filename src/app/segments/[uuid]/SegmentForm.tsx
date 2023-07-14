@@ -1,3 +1,6 @@
+// TODO: 🔥🔥🔥: HOT: Going to replace overkill context here with SWR
+
+
 "use client"
 import React, { useContext, useEffect, useState } from 'react';
 import { Segment } from '@/components/data/model/Segment';

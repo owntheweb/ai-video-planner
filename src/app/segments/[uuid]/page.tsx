@@ -1,3 +1,5 @@
+// TODO: 🔥🔥🔥: HOT: Going to replace overkill context here with SWR
+
 import React from 'react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { get } from '@/components/data/SegmentJsonConnector';
