@@ -3,9 +3,9 @@
 "use client"
 import Drawer from 'react-modern-drawer';
 // Override Drawer component
-// TODO: May be good to seek alternative component with less hard-coded styling?
+// TODO: May be good to seek (or make) alternative component with less hard-coded styling?
 import './DrawerWrapper.css';
-import React, { useState } from 'react';
+import React from 'react';
 
 export interface DrawerWrapperProps {
   open: boolean,

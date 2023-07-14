@@ -1,11 +1,12 @@
-// TODO: 🔥🔥🔥: HOT: Going to replace overkill context here with SWR
-
+"use client"
 import React from 'react';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { get } from '@/components/data/SegmentJsonConnector';
-import { Segment } from '@/components/data/model/Segment';
-import { SegmentProvider } from './SegmentContext';
 import SegmentForm from './SegmentForm';
+import useSWR from 'swr';
+import {
+  getSegment,
+  getSegmentEndpoint as getSegmentCacheKey,
+} from '../../../uiApiLayer/segments';
 
 export interface SegmentByUuidParams {
   uuid: string,
@@ -15,20 +16,30 @@ export interface SegmentByUuidProps {
   params: SegmentByUuidParams,
 }
 
-const newSegment: Segment = {
-  title: '',
-  actions: [],
-}
-
-export default async function SegmentByUuid(props: SegmentByUuidProps) {
-  const uuid = props.params.uuid;
-  // const segment: Segment = uuid === 'create' ? newSegment : await get(uuid);
+export default function SegmentByUuid(props: SegmentByUuidProps) {
+  const segmentCacheKey = getSegmentCacheKey(props.params.uuid);
+  console.log(segmentCacheKey);
+  const {
+    data: segment,
+    error,
+    isLoading,
+  } = useSWR([segmentCacheKey, props.params.uuid], ([url, uuid]) => getSegment(uuid));
   
   return (
-    <SegmentProvider>
-      <main className="prose max-w-none mx-6">
-        <SegmentForm uuid={uuid} />
-      </main>
-    </SegmentProvider>
+    <main className="prose max-w-none mx-6">
+      <Breadcrumbs breadcrumbs={[
+        { uri: '/', title: 'Home' },
+        { uri: '/segments', title: 'Segments' },
+        { title: segment?.title ?? '' },
+      ]} />
+
+      { isLoading && <span className="loading loading-spinner text-secondary"></span> }
+
+      { !isLoading && <SegmentForm uuid={props.params.uuid} /> }
+
+      { error && <div className="text-error">
+        Error: {error.message}
+      </div> }
+    </main>
   )
 }
