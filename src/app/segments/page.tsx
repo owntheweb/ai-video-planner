@@ -1,37 +1,112 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { SegmentList, SegmentListItem } from '@/app/segments/SegmentList';
-import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import useSWR from 'swr';
+import {
+  getSegmentList,
+  segmentListEndpoint as segmentListCacheKey,
+} from '../../uiApiLayer/segments';
+import { DrawerWrapper } from '@/components/DrawerWrapper/DrawerWrapper';
+import { SegmentCreateForm } from './SegmentCreateForm';
+import CreateSearchBar from './CreateSearchBar';
 
 export default function Segments() {
+  const {
+    data: segments,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(segmentListCacheKey, getSegmentList, {
+    onSuccess: (data) => sortSegments(data),
+  });
+
+  const sortSegments = (segments: SegmentListItem[]) => {
+    return segments.sort((a, b) => {
+      return a.title.localeCompare(b.title);
+    });
+  };
+
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
+  const [searchText, setSearchText] = useState('');
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen((prevState) => !prevState);
+  };
+
+  // Open the segment create panel on create button press.
+  const handleOpenCreateForm = () => {
+    toggleDrawer();
+  };
+
+  // Cancel segment creation on cancel click.
+  const handleNewSegmentCancel = () => {
+    toggleDrawer();
+  };
+
+  // Create a new segment on save button / enter
+  const handleNewSegmentSave = async () => {
+    mutate(); // revalidate list data
+    toggleDrawer();
+  };
+
+  // When segments are updated (then reloading), filter those based on current search value
+  useEffect(() => {
+    if (isLoading === false) {
+      setSearchText('');
+    }
+  }, [segments, isLoading]);
+
+  const filteredSegments =
+    searchText && segments
+      ? segments.filter((segment) =>
+          segment.title.toLowerCase().includes(searchText.toLowerCase()),
+        )
+      : segments;
+
   return (
     <main className="prose max-w-none mx-6">
-      <Breadcrumbs breadcrumbs={[{ uri: '/', title: 'Home' }, { title: 'Segments' }]} />
+      <Breadcrumbs
+        breadcrumbs={[{ uri: '/', title: 'Home' }, { title: 'Segments' }]}
+      />
 
-      <SegmentList />
+      <CreateSearchBar
+        onOpenCreateForm={handleOpenCreateForm}
+        onSearch={(searchQuery) => setSearchText(searchQuery)}
+        searchText={searchText}
+        segments={filteredSegments ?? []}
+      />
 
-      <p>
-        A segment is a reusable chunk of video that can be strung together with other segments to form a full video
-        production. Example ideas:
-      </p>
-
-      <ul>
-        <li>recipe introduction</li>
-        <li>logo intro</li>
-        <li>recipe background story</li>
-        <li>cooking show sponsor</li>
-        <li>ingredients</li>
-        <li>like and follow social screen</li>
-        <li>recipe preparation step</li>
-        <li>family side-story about cooking step</li>
-        <li>finished meal showcase</li>
-        <li>final social and Patreon push</li>
-      </ul>
+      <SegmentList segments={filteredSegments ?? []} />
 
       <p>
-        Once a set of segments are created, they can be combined and varied in multiple video productions, keeping video
-        content fresh and unique.
+        A segment is a reusable chunk of video that can be strung together with
+        other segments to form a full video production. Examples: logo intro,
+        recipe introduction, recipe ingredients list
       </p>
+
+      {!isLoading && (!filteredSegments || filteredSegments.length === 0) && (
+        <div className="text-white">No results</div>
+      )}
+
+      {isLoading && (
+        <span className="loading loading-spinner text-secondary"></span>
+      )}
+
+      {error && <div className="text-error">Error: {error.message}</div>}
+
+      <DrawerWrapper
+        title="New Segment"
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+      >
+        <SegmentCreateForm
+          onCreate={handleNewSegmentSave}
+          onCancel={handleNewSegmentCancel}
+          formFocused={isDrawerOpen}
+        />
+      </DrawerWrapper>
     </main>
   );
 }
