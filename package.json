@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier:fix": "npx prettier --write ."
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.9",
@@ -31,6 +32,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "daisyui": "^3.1.10"
+    "daisyui": "^3.1.10",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
   }
 }
