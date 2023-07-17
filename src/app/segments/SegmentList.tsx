@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { getSegmentList, segmentListEndpoint as segmentListCacheKey } from '../../uiApiLayer/segments';
+import {
+  getSegmentList,
+  segmentListEndpoint as segmentListCacheKey,
+} from '../../uiApiLayer/segments';
 import { DrawerWrapper } from '@/components/DrawerWrapper/DrawerWrapper';
 import { SegmentCreateForm } from './SegmentCreateForm';
 
@@ -29,26 +32,15 @@ const SegmentList = () => {
   const [searchText, setSearchText] = useState('');
 
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
   const toggleDrawer = () => {
     setIsDrawerOpen((prevState) => !prevState);
   };
-
-  // Changes with search, defaults to all
-  const [filteredSegments, setFilteredSegments] = useState(segments);
 
   const sortSegments = (segments: SegmentListItem[]) => {
     return segments.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
-  };
-
-  const filterSegments = (segments: SegmentListItem[], searchString: string): SegmentListItem[] => {
-    return segments.filter((segment) => segment.title.toLowerCase().includes(searchString.toLowerCase()));
-  };
-
-  // Don't leave the page if form submit event occurs.
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
   };
 
   // Open the segment create panel on create button press.
@@ -67,25 +59,31 @@ const SegmentList = () => {
     toggleDrawer();
   };
 
-  // We don't really need debounce for this quick project. However,
-  // if we start making dynamic search requests to the server for
-  // larger or filtered lists, debounce is very important. :D
   const debouncedSearch = useDebouncedCallback((value) => {
     setSearchText(value);
-    setFilteredSegments(filterSegments(segments ?? [], value));
   }, 350);
+
+  const filteredSegments =
+    searchText && segments
+      ? segments.filter((segment) =>
+          segment.title.toLowerCase().includes(searchText.toLowerCase()),
+        )
+      : segments;
 
   // When segments are updated, filter those based on current search value
   useEffect(() => {
     if (isLoading === false) {
-      setFilteredSegments(segments);
       setSearchText('');
     }
-  }, [segments]);
+  }, [segments, isLoading]);
 
   return (
     <>
-      <DrawerWrapper title="New Segment" open={isDrawerOpen} onClose={toggleDrawer}>
+      <DrawerWrapper
+        title="New Segment"
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+      >
         <SegmentCreateForm
           onCreate={handleNewSegmentSave}
           onCancel={handleNewSegmentCancel}
@@ -94,7 +92,10 @@ const SegmentList = () => {
       </DrawerWrapper>
 
       <div className="not-prose pb-6 flex gap-4">
-        <button onClick={handleCreate} className="btn btn-primary rounded-btn gap-4">
+        <button
+          onClick={handleCreate}
+          className="btn btn-primary rounded-btn gap-4"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -103,7 +104,11 @@ const SegmentList = () => {
             stroke="currentColor"
             className="w-6 h-6"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
           </svg>
           Create Segment
         </button>
@@ -155,7 +160,9 @@ const SegmentList = () => {
         <div className="text-white">No results</div>
       )}
 
-      {isLoading && <span className="loading loading-spinner text-secondary"></span>}
+      {isLoading && (
+        <span className="loading loading-spinner text-secondary"></span>
+      )}
 
       {error && <div className="text-error">Error: {error.message}</div>}
     </>
