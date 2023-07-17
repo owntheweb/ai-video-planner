@@ -1,63 +1,38 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Segment } from '@/components/data/model/Segment';
-import Breadcrumbs from '@/components/Breadcrumbs';
 import { useDebouncedCallback } from 'use-debounce';
-import useSWR from 'swr';
-import {
-  getSegment,
-  getSegmentEndpoint as getSegmentCacheKey,
-  updateSegment,
-  deleteSegment,
-} from '../../../uiApiLayer/segments';
 
 export interface SegmentFormProps {
-  uuid: string;
+  segment: Segment;
+  onSave(segment: Segment): void;
+  onDelete(): void;
 }
 
 export default function SegmentForm(props: SegmentFormProps) {
-  const segmentCacheKey = getSegmentCacheKey(props.uuid);
-  const {
-    data: segment,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR([segmentCacheKey, props.uuid], ([url, uuid]) => getSegment(uuid));
+  // Update the title field freely while not bothering the parent with an update that saves (debounce controlled component delays)
+  const [pendingTitle, setPendingTitle] = useState(props.segment.title);
 
-  // Save the full segment by either creating a new segment or updating the existing.
-  const saveSegment = async (segment: Segment) => {
-    if (segment.title === '') {
-      return;
+  // reduce save data request counts with debounce
+  const handleDebouncedTitle = useDebouncedCallback((value: string) => {
+    if (props.segment) {
+      props.onSave({
+        ...props.segment,
+        title: value,
+      });
     }
+  }, 750);
 
-    await updateSegment(segment);
-    mutate();
-    console.log('hey');
-  };
-
-  const handleDelete = async () => {
-    if (segment?.uuid) {
-      await deleteSegment(segment.uuid);
-
-      // TODO: probably a better way:
-      window.location.href = '/segments';
-    }
+  // Update a workable form value right away for further edits while debouncing value to save
+  const handleTitleChange = (value: string) => {
+    setPendingTitle(value);
+    handleDebouncedTitle(value);
   };
 
   // Don't leave the page if form submit event occurs.
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-
-  // Reduce calls to save data
-  const handleDebouncedTitle = useDebouncedCallback((value) => {
-    if (segment) {
-      saveSegment({
-        ...segment,
-        title: value,
-      });
-    }
-  }, 750);
 
   return (
     <>
@@ -70,17 +45,18 @@ export default function SegmentForm(props: SegmentFormProps) {
           </label>
           <input
             type="text"
-            placeholder={isLoading ? '' : 'Example: Intro'}
+            placeholder="Example: Intro"
             className="input input-bordered w-full max-w-xs"
-            defaultValue={segment?.title}
-            onChange={(e) => handleDebouncedTitle(e.target.value)}
+            value={pendingTitle}
+            onChange={(e) => handleTitleChange(e.target.value)}
+            autoFocus
           />
         </div>
 
         <h3>Actions</h3>
         <p>[TODO: Get the fun started here!]</p>
 
-        <button onClick={handleDelete} className="btn btn-error rounded-btn gap-4">
+        <button onClick={props.onDelete} className="btn btn-error rounded-btn gap-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
