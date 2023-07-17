@@ -10,27 +10,27 @@ const db = new JsonDB(new Config('data/segments', true, true, '/'));
 const emptyResponseSegment: Segment = {
   title: 'Unknown',
   actions: [],
-}
+};
 
 // Return all segment titles and uuids.
 const list = async (): Promise<SegmentListItem[]> => {
   const segmentData: any = await db.getObjectDefault('/', {}); // TODO: No any!
-  const segments:Segment[] = Object.values(segmentData);
-  const segmentList: SegmentListItem[] = segments.map(segment => ({
+  const segments: Segment[] = Object.values(segmentData);
+  const segmentList: SegmentListItem[] = segments.map((segment) => ({
     title: segment.title,
     uuid: segment.uuid ?? '',
   }));
   return segmentList ?? [];
-}
+};
 
 // Get a single segment by uuid
 const get = async (uuid: string): Promise<Segment> => {
   return await db.getObjectDefault(`/${uuid}`, emptyResponseSegment);
-}
+};
 
 const create = async (segment: Segment): Promise<Segment> => {
   const uuid = uuidV4();
-  
+
   const newSegment = {
     ...segment,
     uuid,
@@ -40,13 +40,13 @@ const create = async (segment: Segment): Promise<Segment> => {
 
   try {
     await db.push(`/${uuid}`, newSegment);
-  } catch(err) {
+  } catch (err) {
     // TODO: Determine better plan for handling errors up the stack here.
     console.log('SegmentJsonConnector delete error', err);
   }
 
   return newSegment;
-}
+};
 
 const update = async (segment: Segment) => {
   const updatedSegment = {
@@ -56,28 +56,22 @@ const update = async (segment: Segment) => {
 
   try {
     await db.push(`/${segment.uuid}`, updatedSegment);
-  } catch(err) {
+  } catch (err) {
     // TODO: Determine better plan for handling errors up the stack here.
     console.log('SegmentJsonConnector delete error', err);
   }
 
   return updatedSegment;
-}
+};
 
 // 'delete' would be more CRUD-like, yet delete is reserved word in JavaScript. :)
 const remove = async (uuid: string) => {
   try {
     await db.delete(`/${uuid}`);
-  } catch(err) {
+  } catch (err) {
     // TODO: Determine better plan for handling errors up the stack here.
     console.log('SegmentJsonConnector delete error');
   }
-}
+};
 
-export {
-  list,
-  get,
-  create,
-  update,
-  remove,
-}
+export { list, get, create, update, remove };

@@ -1,13 +1,11 @@
-"use client"
+'use client';
 import React, { useEffect, useRef } from 'react';
-import {
-  createSegment,
-} from '../../uiApiLayer/segments';
+import { createSegment } from '../../uiApiLayer/segments';
 
 export interface SegmentCreateFormProps {
-  onCancel(): void,
-  onCreate(): void,
-  formFocused: boolean,
+  onCancel(): void;
+  onCreate(): void;
+  formFocused: boolean;
 }
 
 const SegmentCreateForm = (props: SegmentCreateFormProps) => {
@@ -18,12 +16,12 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
     if (props.formFocused === true && newSegmentInputRef.current) {
       newSegmentInputRef.current.focus();
     }
-  }, [props.formFocused])
+  }, [props.formFocused]);
 
   // Don't leave the page if form submit event occurs.
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  }
+  };
 
   // Cancel segment creation on cancel click.
   const handleNewSegmentCancel = () => {
@@ -31,7 +29,7 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
       newSegmentInputRef.current.value = '';
     }
     props.onCancel();
-  }
+  };
 
   // Create a new segment on save button / enter
   const handleNewSegmentSave = async () => {
@@ -40,11 +38,10 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
       newSegmentInputRef.current.value = '';
     }
     props.onCreate();
-  }
-  
+  };
+
   return (
     <form className="form" onSubmit={handleFormSubmit}>
-
       <div className="form-control w-full max-w-xs">
         <label className="label">
           <span className="label-text">Segment Title</span>
@@ -59,21 +56,34 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
 
       <div className="flex gap-4 pt-6 justify-end">
         <button onClick={handleNewSegmentSave} className="btn btn-sm btn-primary rounded-btn gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
           Save
         </button>
         <button onClick={handleNewSegmentCancel} className="btn btn-sm btn-secondary rounded-btn gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
           Cancel
         </button>
       </div>
-
     </form>
-  )
-}
+  );
+};
 
 export { SegmentCreateForm };
