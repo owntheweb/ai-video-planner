@@ -80,10 +80,7 @@ export default function SegmentForm(props: SegmentFormProps) {
         <h3>Actions</h3>
         <p>[TODO: Get the fun started here!]</p>
 
-        <button
-          onClick={handleDelete}
-          className="btn btn-error rounded-btn gap-4"
-        >
+        <button onClick={handleDelete} className="btn btn-error rounded-btn gap-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -92,11 +89,7 @@ export default function SegmentForm(props: SegmentFormProps) {
             stroke="currentColor"
             className="w-6 h-6"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
           Delete Segment
         </button>

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { SegmentList, SegmentListItem } from '@/app/segments/SegmentList';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import useSWR from 'swr';
-import {
-  getSegmentList,
-  segmentListEndpoint as segmentListCacheKey,
-} from '../../uiApiLayer/segments';
+import { getSegmentList, segmentListEndpoint as segmentListCacheKey } from '../../uiApiLayer/segments';
 import { DrawerWrapper } from '@/components/DrawerWrapper/DrawerWrapper';
 import { SegmentCreateForm } from './SegmentCreateForm';
 import CreateSearchBar from './CreateSearchBar';
@@ -60,16 +57,12 @@ export default function Segments() {
 
   const filteredSegments =
     searchText && segments
-      ? segments.filter((segment) =>
-          segment.title.toLowerCase().includes(searchText.toLowerCase()),
-        )
+      ? segments.filter((segment) => segment.title.toLowerCase().includes(searchText.toLowerCase()))
       : segments;
 
   return (
     <main className="prose max-w-none mx-6">
-      <Breadcrumbs
-        breadcrumbs={[{ uri: '/', title: 'Home' }, { title: 'Segments' }]}
-      />
+      <Breadcrumbs breadcrumbs={[{ uri: '/', title: 'Home' }, { title: 'Segments' }]} />
 
       <CreateSearchBar
         onOpenCreateForm={handleOpenCreateForm}
@@ -81,26 +74,19 @@ export default function Segments() {
       <SegmentList segments={filteredSegments ?? []} />
 
       <p>
-        A segment is a reusable chunk of video that can be strung together with
-        other segments to form a full video production. Examples: logo intro,
-        recipe introduction, recipe ingredients list
+        A segment is a reusable chunk of video that can be strung together with other segments to form a full video
+        production. Examples: logo intro, recipe introduction, recipe ingredients list
       </p>
 
       {!isLoading && (!filteredSegments || filteredSegments.length === 0) && (
         <div className="text-white">No results</div>
       )}
 
-      {isLoading && (
-        <span className="loading loading-spinner text-secondary"></span>
-      )}
+      {isLoading && <span className="loading loading-spinner text-secondary"></span>}
 
       {error && <div className="text-error">Error: {error.message}</div>}
 
-      <DrawerWrapper
-        title="New Segment"
-        open={isDrawerOpen}
-        onClose={toggleDrawer}
-      >
+      <DrawerWrapper title="New Segment" open={isDrawerOpen} onClose={toggleDrawer}>
         <SegmentCreateForm
           onCreate={handleNewSegmentSave}
           onCancel={handleNewSegmentCancel}

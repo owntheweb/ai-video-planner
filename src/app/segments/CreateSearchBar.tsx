@@ -11,10 +11,7 @@ export interface CreateSearchBarProps {
 export default function CreateSearchBar(props: CreateSearchBarProps) {
   return (
     <div className="not-prose pb-6 flex gap-4">
-      <button
-        onClick={props.onOpenCreateForm}
-        className="btn btn-primary rounded-btn gap-4"
-      >
+      <button onClick={props.onOpenCreateForm} className="btn btn-primary rounded-btn gap-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -23,11 +20,7 @@ export default function CreateSearchBar(props: CreateSearchBarProps) {
           stroke="currentColor"
           className="w-6 h-6"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
         Create Segment
       </button>
