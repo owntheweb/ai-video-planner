@@ -1,6 +1,7 @@
-// TODO: support escape key to close
-
 'use client';
+// TODO: support escape key to close
+import { useEffect } from 'react';
+
 import Drawer from 'react-modern-drawer';
 // Override Drawer component
 // TODO: May be good to seek (or make) alternative component with less hard-coded styling?
@@ -15,6 +16,21 @@ export interface DrawerWrapperProps {
 }
 
 const DrawerWrapper = (props: DrawerWrapperProps) => {
+  // Allow ESC key to signal drawer close
+  useEffect(() => {
+    const keyDownHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        props.onClose();
+      }
+    };
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [props]);
+
   return (
     <Drawer
       open={props.open}
