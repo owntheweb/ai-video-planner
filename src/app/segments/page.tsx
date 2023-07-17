@@ -4,9 +4,9 @@ import { SegmentList, SegmentListItem } from '@/app/segments/SegmentList';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import useSWR from 'swr';
 import { getSegmentList, segmentListEndpoint as segmentListCacheKey } from '../../uiApiLayer/segments';
-import { DrawerWrapper } from '@/components/DrawerWrapper/DrawerWrapper';
 import { SegmentCreateForm } from './SegmentCreateForm';
 import CreateSearchBar from './CreateSearchBar';
+import { Drawer } from '@/components/Drawer';
 
 export default function Segments() {
   const {
@@ -86,13 +86,13 @@ export default function Segments() {
 
       {error && <div className="text-error">Error: {error.message}</div>}
 
-      <DrawerWrapper title="New Segment" open={isDrawerOpen} onClose={toggleDrawer}>
+      <Drawer title="New Segment" open={isDrawerOpen} onClose={toggleDrawer}>
         <SegmentCreateForm
           onCreate={handleNewSegmentSave}
           onCancel={handleNewSegmentCancel}
           formFocused={isDrawerOpen}
         />
-      </DrawerWrapper>
+      </Drawer>
     </main>
   );
 }

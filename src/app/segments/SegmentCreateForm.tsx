@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createSegment } from '../../uiApiLayer/segments';
 
 export interface SegmentCreateFormProps {
@@ -9,6 +9,8 @@ export interface SegmentCreateFormProps {
 }
 
 const SegmentCreateForm = (props: SegmentCreateFormProps) => {
+  const [titleError, setTitleError] = useState(false);
+
   // Focus on new segment title field when create panel opens.
   const newSegmentInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,13 +20,37 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
     }
   }, [props.formFocused]);
 
+  useEffect(() => {
+    const keyDownHandler = (e: KeyboardEvent) => {
+      // reset title error checks with key press
+      // TODO: This could be overkill, need to revisit best practice for form field error handling.
+      setTitleError(false);
+    };
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []);
+
   // Don't leave the page if form submit event occurs.
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (newSegmentInputRef.current) {
-      await createSegment(newSegmentInputRef.current.value);
-      newSegmentInputRef.current.value = '';
+
+    if (!newSegmentInputRef.current) {
+      return;
     }
+
+    const value = newSegmentInputRef.current.value.trim();
+
+    if (!value) {
+      setTitleError(true);
+      return;
+    }
+
+    await createSegment(newSegmentInputRef.current.value);
+    newSegmentInputRef.current.value = '';
+    setTitleError(false);
     props.onCreate();
   };
 
@@ -33,12 +59,13 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
     if (newSegmentInputRef.current) {
       newSegmentInputRef.current.value = '';
     }
+    setTitleError(false);
     props.onCancel();
   };
 
   return (
-    <form className="form" onSubmit={handleFormSubmit}>
-      <div className="form-control w-full max-w-xs">
+    <form className="form w-full" onSubmit={handleFormSubmit}>
+      <div className="form-control w-full">
         <label className="label">
           <span className="label-text">Segment Title</span>
         </label>
@@ -46,7 +73,7 @@ const SegmentCreateForm = (props: SegmentCreateFormProps) => {
           ref={newSegmentInputRef}
           type="text"
           placeholder="Example: Intro"
-          className="input input-bordered w-full max-w-xs"
+          className={`input input-bordered w-full ${titleError ? 'input-error' : ''}`}
         />
       </div>
 
