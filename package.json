@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prettier:fix": "npx prettier --write .",
     "test": "jest --watch",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci --coverage"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.9",

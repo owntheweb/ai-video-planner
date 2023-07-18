@@ -1,11 +1,10 @@
 import React from 'react';
-import { SegmentListItem } from './SegmentList';
 
 export interface CreateSearchBarProps {
   onOpenCreateForm(): void;
   onSearch(value: string): void;
   searchText: string;
-  segments: SegmentListItem[];
+  searchEnabled: boolean;
 }
 
 export default function CreateSearchBar(props: CreateSearchBarProps) {
@@ -25,7 +24,7 @@ export default function CreateSearchBar(props: CreateSearchBarProps) {
         Create Segment
       </button>
 
-      {props.segments && props.segments?.length > 0 && (
+      {props.searchEnabled && (
         <div className="form-control flex-1 invisible sm:visible">
           <input
             type="text"

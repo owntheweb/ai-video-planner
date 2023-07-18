@@ -68,21 +68,21 @@ export default function Segments() {
         onOpenCreateForm={handleOpenCreateForm}
         onSearch={(searchQuery) => setSearchText(searchQuery)}
         searchText={searchText}
-        segments={filteredSegments ?? []}
+        searchEnabled={filteredSegments ? true : false}
       />
 
       <SegmentList segments={filteredSegments ?? []} />
 
       <p>
         A segment is a reusable chunk of video that can be strung together with other segments to form a full video
-        production. Examples: logo intro, recipe introduction, recipe ingredients list
+        production. Examples: logo intro, recipe introductions, recipe ingredients list
       </p>
 
       {!isLoading && (!filteredSegments || filteredSegments.length === 0) && (
         <div className="text-white">No results</div>
       )}
 
-      {isLoading && <span className="loading loading-spinner text-secondary"></span>}
+      {isLoading && <span data-testid="loading-spinner" className="loading loading-spinner text-secondary"></span>}
 
       {error && <div className="text-error">Error: {error.message}</div>}
 

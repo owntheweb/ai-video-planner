@@ -25,15 +25,21 @@ const Drawer = (props: DrawerProps) => {
     };
   }, [props]);
 
-  const invisibleClass = props.open ? '' : 'invisible';
-
   return (
     <>
-      <div className={`bg-black h-full w-full absolute top-0 left-0 opacity-75 ${invisibleClass}`}></div>
-      <nav className={`bg-neutral p-6 w-96 h-full absolute top-0 left-0 ${invisibleClass}`}>
-        {props.title && <h3 className="mt-0">{props.title}</h3>}
-        {props.children}
-      </nav>
+      {props.open && (
+        <>
+          <div
+            className={`bg-black h-full w-full absolute top-0 left-0 opacity-75`}
+            onClick={props.onClose}
+            data-testid="drawer-overlay"
+          ></div>
+          <nav className={`bg-neutral p-6 w-96 h-full absolute top-0 left-0`}>
+            {props.title && <h3 className="mt-0">{props.title}</h3>}
+            {props.children}
+          </nav>
+        </>
+      )}
     </>
   );
 };
